@@ -1,34 +1,63 @@
-server {
-      listen 80 default_server;
-      root /usr/share/nginx/rezoomex/;
-      index index.html index.htm;
-      server_name localhost;
+3.11 Order Management
+3.13 Auction ....
+3.2 NEAT System......
+3.5 Local Database
+3.9 NEAT Screen
+4.4 Settlement Agencies
+4.10 International Securities Identification Number ***
+4.11 Data and Report Downloads
+SEBI (Intermediaries) Regulations,2008 ***
+Circuit Breakers --> page no 90 chart ***
+
+Box 4.1: Investor Protection Fund ***
+
+Surrender of Trading membershi/Broker
+Surrender of Non Broker
+
+IOC:  Partial match is possible for the order, and the unmatched portion of the order is cancelled immediately
+Numericals:
+All orders can be modified in the system till the time they do not get fully traded and only during
+market hours
 
 
-        error_page 502 /error.html;
-        location = /error.html {
-            internal;
-            root /usr/share/nginx/rezoomex/;
-            rewrite ^/*$ http://localhost:9000/error.html permanent;
-        }
+Stop Loss Matching
+All stop loss orders entered into the system are stored in the stop loss book. These orders can
+contain two prices:
+(a) Trigger Price: It is the price at which the order gets triggered from the stop loss book.
+(b) Limit Price: It is the price for orders after the orders get triggered from the stop loss
+book. If the limit price is not specified, the trigger price is taken as the limit price for
+the order. The stop loss orders are prioritised in the stop loss book with the most likely
+order to trigger first and the least likely to trigger last. The priority is same as that of
+the regular lot book.
+The stop loss condition is met under the following circumstances:
+(a) Sell Order: A sell order in the stop loss book gets triggered when the last traded price
+in the normal market reaches or falls below the trigger price of the order.
+(b) Buy Order: A buy order in the stop loss book gets triggered when the last traded price
+in the normal market reaches or exceeds the trigger price of the order.
+When a stop loss order with IOC condition enters the system, the order is released in the
+market after it is triggered. Once triggered, the order scans the counter order book for a
+suitable match to result in a trade or else is cancelled by the system.
 
 
-      location /rez {
-        access_log on;
+Auction Matching
+All auction orders are entered into the auction order book. The rules for matching of auctions
+are similar to that of the regular lot book except for the following points:
+(a) Auction order matching takes place at the end of the solicitor period for the auction.
+(b) Auction matching takes place only across orders belonging to the same auction.
+(c) All auction trades take place at the auction price.
 
-        proxy_pass http://localhost:9000;
-        proxy_set_header Host $host;
-        proxy_cache_bypass $http_upgrade;
-      }
+Validation Check
+While matching orders, the system performs the validation check, if the participant of any of
+the orders is ‘Suspended’, the trade does not go through
 
-      location /openws {
-        access_log on;
-        proxy_pass http://localhost:9000;
+Auction:
 
-        proxy_http_version 1.1;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header Host $host;
-      }
+Modify:
+The user is not allowed to modify any auction orders.
+Auction Order Cancellation:
+Cancel:
+The user can cancel any solicitor order placed by him in any auction provided the solicitor
+period for that auction is not over.
+
+Surrender of Trading membershi/Broker
+Surrender of Non Broker
